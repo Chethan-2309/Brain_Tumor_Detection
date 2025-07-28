@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}Detector - Brain Tumor Detection{% endblock %}
+
+{% block content %}
+<h1><i class="fas fa-microscope"></i> Detection & Search Tool</h1>
+
+<div class="main-content-wrapper">
+    <div class="action-box classifier-box">
+        <h3><i class="fas fa-upload"></i> Classify Brain MRI</h3>
+        <form action="/predict" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" id="file" required>
+            <button type="submit" class="classify-btn">Classify</button>
+        </form>
+    </div>
+    <div class="action-box search-box">
+        <h3><i class="fas fa-search"></i> Search & Download Images</h3>
+        <form id="image-search-form">
+            <input type="text" id="search-query" placeholder="e.g., pituitary tumor mri" required>
+            <button type="submit" class="search-btn">Search</button>
+        </form>
+        <p class="download-note">You can download images from the Google search results by right-clicking on an image and selecting "Save image as...".</p>
+    </div>
+</div>
+
+{% if error_message %}
+<div class="error-container">
+    <img src="{{ image_path }}" alt="Invalid Uploaded Image" class="error-image">
+    <p class="error-text"><i class="fas fa-exclamation-triangle"></i> {{ error_message }}</p>
+</div>
+{% endif %}
+
+{% if prediction_text %}
+<div class="result-container">
+    <div class="image-box">
+        <h3>Uploaded Image</h3>
+        <img src="{{ image_path }}" alt="Uploaded Image">
+    </div>
+    <div class="prediction-box">
+        <h3>Analysis Result</h3>
+        <p class="prediction-text {{ prediction_class }}">{{ prediction_text }}</p>
+
+        {% if suggestions %}
+        <div class="info-box">
+            <h4>Medical Suggestions:</h4>
+            <ul>
+                {% for item in suggestions %}
+                <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+            <div class="button-container">
+                <a href="{{ search_url }}" target="_blank" class="action-button treatment-btn">Search Treatments</a>
+                <a href="{{ image_search_url }}" target="_blank" class="action-button image-btn">Search for Similar Images</a>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if precautions %}
+        <div class="info-box">
+            <h4>Health Precautions:</h4>
+            <ul>
+                {% for item in precautions %}
+                <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+
+<script>
+    document.getElementById('image-search-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const query = document.getElementById('search-query').value;
+        const googleImagesUrl = `https://www.google.com/search?tbm=isch&q=${encodeURIComponent(query)}`;
+        window.open(googleImagesUrl, '_blank');
+    });
+</script>
+{% endblock %}

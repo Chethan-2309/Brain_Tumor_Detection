@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Brain Tumor Detection{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <section class="dashboard-section">
+        <h2><i class="fas fa-project-diagram"></i> About the Application</h2>
+        <p>This tool leverages a deep learning model, specifically a Convolutional Neural Network (CNN), to provide a preliminary analysis of brain MRI scans. It is designed to classify an MRI as either containing a tumor or not. The system also includes a gatekeeper model to ensure that only valid MRI scans are processed, improving the reliability of the results. This project serves as a demonstration of how AI can be applied in the medical imaging field to assist in early detection.</p>
+    </section>
+
+    <section class="dashboard-section">
+        <h2><i class="fas fa-info-circle"></i> What is a Brain Tumor?</h2>
+        <p>A brain tumor is an abnormal growth of cells within the brain. Tumors can be benign (noncancerous) or malignant (cancerous), and both can cause serious health issues by pressing on sensitive areas of the brain. Early detection through imaging techniques like MRI is crucial for timely diagnosis and treatment, significantly improving patient outcomes. Common symptoms can include headaches, seizures, and changes in personality or cognitive function.</p>
+    </section>
+
+    <section class="dashboard-section">
+        <h2><i class="fas fa-images"></i> Example Tumor Images</h2>
+        <p>Below are some examples of what brain tumors can look like in MRI scans. Note the highlighted areas of abnormal tissue growth.</p>
+        <div class="image-gallery">
+            {% for img_path in example_images %}
+            <div class="gallery-item">
+                <img src="{{ url_for('static', filename=img_path.split('static/')[1]) }}" alt="Example Tumor MRI">
+                <div class="caption">Tumor Example</div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+{% endblock %}
